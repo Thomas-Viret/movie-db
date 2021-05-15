@@ -1,0 +1,37 @@
+{% extends 'back/base_admin.html.twig' %}
+
+
+{% block title %}Departments{% endblock %}
+
+{% block body %}
+    
+    <h1>Browse Departments</h1>
+
+    {# https://getbootstrap.com/docs/5.0/content/tables/ #}
+<table class="table table-hover table-striped">
+  {# En-têtes du tableau #}
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+     {# On boucle sur les articles #}
+    {% for department in departments %}        
+    <tr>
+      <th scope="row">{{ department.id }}</th>
+      <td><a href="{{ path('department_read', {id: department.id}) }}">{{ department.name }}</a></td>
+      {# @see https://www.php.net/manual/fr/datetime.format.php#refsect1-datetime.format-parameters #}
+      <td>
+          <a class="btn btn-sm btn-primary" href="#">Modifier</a>
+          <a class="btn btn-sm btn-danger" href="#" onclick="return confirm('Voulez-vous supprimez : {{ department.name|e('js') }} ?')">Supprimer</a>
+      </td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+
+{% endblock %}

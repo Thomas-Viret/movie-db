@@ -1,0 +1,62 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    # Si on souhaite configurer ce paramètre sur chaque machine
+    # on le place dans le .env.local
+    app.is_logging_enabled: '%env(bool:IS_LOGGING_ENABLED)%'
+    app.to_lower: '%env(bool:TO_LOWER)%'
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    # Pour configurer un service on utilise son FQCN
+    App\Service\MessageGenerator:
+        # Arguments du constructeur
+        arguments:
+            $isLoggingEnabled: '%app.is_logging_enabled%'
+
+    
+    App\Service\MySlugger:
+        # Arguments du constructeur
+        arguments:
+            $toLower: '%app.to_lower%'
+            # public: true
+
+    App\EventListener\MovieEntityListener:
+        tags:
+            -
+                # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                event: 'prePersist'
+                entity: 'App\Entity\Movie'
+                method: 'updateSlug'
+            -
+                # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                event: 'preUpdate'
+                entity: 'App\Entity\Movie'
+                method: 'updateSlug'

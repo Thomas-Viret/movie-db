@@ -1,0 +1,56 @@
+{% extends 'back/base_admin.html.twig' %}
+
+
+{% block title %}
+    {{ movie.title }}
+{% endblock %}
+
+{% block body %}
+<h1>{{ movie.title }}</h1>
+
+{# <p>Genres :
+    {% for genre in movie.genres %}
+        {{ genre.name }}{% if loop.last %}.{% else %}, {% endif %}
+    {% endfor %}</p> #}
+
+<h2>Genres :</h2>
+{# Les Reviews contenus dans $movie->getReviews() #}
+<ul>
+    {% for genre in movie.genres %}
+        <li>{{ genre.name }}</li>
+    {% endfor %}
+</ul>
+
+<p>Sorti en {{ movie.releaseDate|date('Y') }}</p>
+
+
+<hr>
+
+<h2>Critiques</h2>
+
+{# Les Reviews contenus dans $movie->getReviews() #}
+<ul>
+    {% for review in movie.reviews %}
+        <li>{{ review.content }}</li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h2>Casting</h2>
+
+{# Les Reviews contenus dans $movie->getReviews() #}
+<ul>
+    {# https://twig.symfony.com/doc/2.x/filters/sort.html #}
+    {# {% for casting in movie.castings|sort((a,b) => a.creditOrder <=> b.creditOrder) %} #}
+    {% for casting in castings %}
+       <li>Rôle : <b>{{ casting.role }}</b> joué par <i>{{ casting.person.firstname }} {{ casting.person.lastname }}</i> ({{ casting.creditOrder }})</li>
+
+    {% endfor %}
+</ul>
+
+
+<p><a class="btn btn-sm btn-primary" href="{{ path('review_add') }}">Ajouter une critique</a></p>
+                
+
+{% endblock %}

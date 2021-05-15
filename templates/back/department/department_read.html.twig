@@ -1,0 +1,26 @@
+{% extends 'back/base_admin.html.twig' %}
+
+
+{% block title %}
+    {{ department.name }}
+{% endblock %}
+
+{% block body %}
+<h1>{{ department.name }}</h1>
+
+<hr>
+
+<h4>Jobs :</h4>
+
+{# Les Reviews contenus dans $movie->getReviews() #}
+<ul>
+    {% for job in department.jobs %}
+        <li>{{ job.name }}</li>
+    {% endfor %}
+</ul>
+
+
+       
+                
+
+{% endblock %}

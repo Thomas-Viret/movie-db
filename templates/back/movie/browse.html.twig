@@ -1,0 +1,48 @@
+{% extends 'back/base_admin.html.twig' %}
+
+
+{% block title %}Movies{% endblock %}
+
+{% block body %}
+    <h1>Browse Movies</h1>
+
+
+    <p><a href="{{ path('movie_add') }}" class="btn btn-success">New Movie</a></p>
+
+    {# https://getbootstrap.com/docs/5.0/content/tables/ #}
+<table class="table table-hover table-striped">
+  {# En-têtes du tableau #}
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Titre</th>
+      <th scope="col">Date de sortie</th>
+      <th scope="col">actions</th>
+    </tr>
+  </thead>
+  <tbody>
+     {# On boucle sur les articles #}
+    {% for movie in movies %}        
+    <tr>
+      <th scope="row">{{ movie.id }}</th>
+      <td><a href="{{ path('movie_read', {id: movie.id}) }}">{{ movie.title }}</a></td>
+      {# @see https://www.php.net/manual/fr/datetime.format.php#refsect1-datetime.format-parameters #}
+      <td>{{ movie.releaseDate|date('d-m-Y H:i') }}</td>
+      <td>
+          <a class="btn btn-sm btn-primary" href="{{ path('movie_edit', {id: movie.id}) }}">Modifier</a>
+
+        {# Fake HTTP Method, see https://symfony.com/doc/current/routing.html#matching-http-methods #}
+          <form action="{{ path('movie_delete', {id:movie.id}) }}" onsubmit="return confirm('Voulez-vous supprimez : {{ movie.title|e('js') }} ?')" method="POST">
+            <button class="btn btn-sm btn-danger" type="submit" >Supprimer</button>
+            <input type="hidden" name="_method" value="DELETE"/>
+            <input type="hidden" name="token" value="{{ csrf_token('delete-movie') }}"/>
+          </form>
+      </td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+
+{% endblock %}

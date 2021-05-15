@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+
+
+        <h1>Connexion</h1>
+        
+        {# Rendu du formulaire, tout-en-un via form() #}
+        {# {{ form(form, {attr: {class: 'login__form', novalidate: 'novalidate'}}) }} #}
+        {{ form_start(form, {attr: { novalidate: 'novalidate' }}) }}
+                {# Génère tous les chaps du form #}
+        {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-success">Ajouter</button>
+
+        {{ form_end(form) }}
+
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'back/base_admin.html.twig' %}
+
+
+{% block title %}
+    Edit Movie
+{% endblock %}
+
+{% block body %}
+
+<h1>Edit Movie</h1>
+
+{# On inclut le fragment de template qui correspond au formulaire #}
+{{ include('back/_form.html.twig') }}
+
+{% endblock %}

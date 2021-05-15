@@ -1,0 +1,18 @@
+{% extends 'back/base_admin.html.twig' %}
+
+
+{% block title %}
+    {{ job.name }}
+{% endblock %}
+
+{% block body %}
+<h1>{{ job.name }}</h1>
+
+
+<hr>
+
+<h4>Department : </h4>
+<p>{{ job.department.name }}</p>
+
+
+{% endblock %}
