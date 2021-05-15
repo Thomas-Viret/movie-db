@@ -48,17 +48,14 @@ class MainController extends AbstractController
     public function movieShow(Movie $movie = null, CastingRepository $castingRepository): Response
     {
 
-        // 404 ?
+      
         if ($movie === null) {
             throw $this->createNotFoundException('Film non trouvé.');
         }
-        // On peut également récupérer les castings depuis le contrôleur
-        // plutôt que de laisser Doctrine le faire depuis Twig
-        // $castings = $castingRepository->findBy(['movie' => $movie], ['creditOrder' => 'ASC']);
        
 
         $castings = $castingRepository->findOneByMovieJoinedToPersonDQL($movie);
-        //dd($castings);
+  
 
         return $this->render('front/main/movie_show.html.twig', [
             'movie' => $movie,

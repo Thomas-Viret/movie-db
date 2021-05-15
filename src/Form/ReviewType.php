@@ -90,7 +90,7 @@ class ReviewType extends AbstractType
                     new Url([
                         'protocols' => ['http', 'https'],
                     ]),
-                    new NotBlank(),
+                    // new NotBlank(),
                 ],
                 'label' => 'Site web'
             ])

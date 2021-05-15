@@ -34,7 +34,7 @@ class DepartmentController extends AbstractController
     public function read(Department $department = null): Response
     {
        
-         // 404 ?
+        
          if ($department === null) {
             throw $this->createNotFoundException('Film non trouvé.');
         }

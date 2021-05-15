@@ -49,18 +49,15 @@ class MovieController extends AbstractController
     public function read(Movie $movie = null, CastingRepository $castingRepository): Response
     {
 
-         // 404 ?
+      
          if ($movie === null) {
             throw $this->createNotFoundException('Film non trouvé.');
         }
 
-        // On peut également récupérer les castings depuis le contrôleur
-        // plutôt que de laisser Doctrine le faire depuis Twig
-        // $castings = $castingRepository->findBy(['movie' => $movie], ['creditOrder' => 'ASC']);
-       
+    
 
         $castings = $castingRepository->findOneByMovieJoinedToPersonDQL($movie);
-        //dd($castings);
+
 
         return $this->render('back/movie/movie_read.html.twig', [
             'movie' => $movie,
@@ -88,16 +85,6 @@ class MovieController extends AbstractController
         // Traitement du form
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // A ce stade, le $post d'origine est modifié
-            // On pourrait modifier une propriété de l'entité
-            // par ex. encoder un mot de passe
-             // On récupère les données du form
-            //  $reviewData = $form->getData();
-            // dd($reviewData);
-
-            //$movie->setSlug($slugger->toSlug($movie->getTitle()));
-             // On slugifie le titre
-            // => cela a été déplacé dans le Listener
             
             // On demande au Manager de sauvegarder l'entité
             //$entityManager = $this->getDoctrine()->getManager();// déjà mis en paramètre
@@ -129,9 +116,6 @@ class MovieController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            
-            //$movie->setSlug($slugger->toSlug($movie->getTitle()));
-            // => cela a été déplacé dans le Listener
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -153,7 +137,7 @@ class MovieController extends AbstractController
      */
     public function delete(Movie $movie = null, Request $request, EntityManagerInterface $entityManager)
     {
-        // 404 ?
+       
         if ($movie === null) {
             throw $this->createNotFoundException('Film non trouvé.');
         }

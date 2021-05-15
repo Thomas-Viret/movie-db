@@ -40,14 +40,9 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            //  $reviewData = $form->getData();
-            // dump($reviewData);
-             //dd($form->getData()->getPassword());
+         
             $user->setPassword($passwordEncoder->encodePassword($user, $form->getData()->getPassword()));
-            // ouC'est là qu'on encode le mot de passe du User (qui se trouve dans $user)
-            // $hashedPassword = $passwordEncoder->encodePassword($user, $user->getPassword());
-            // On réassigne le mot passe encodé dans le User
-            // $user->setPassword($hashedPassword);
+           
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();

@@ -41,7 +41,7 @@ class MovieController extends AbstractController
      */
     public function readItem(Movie $movie = null): Response
     {
-        // 404 ?
+        
         if ($movie === null) {
 
             // Optionnel, message pour le front
@@ -54,11 +54,6 @@ class MovieController extends AbstractController
             return $this->json($message, Response::HTTP_NOT_FOUND);
         }
 
-        // @todo Tenter d'utiliser la requête custom
-        // de jointure sur castings et persons
-
-        // Le 4ème argument représente le "contexte"
-        // qui sera transmis au Serializer
         return $this->json($movie, 200, [], ['groups' => [
                 'movies_read',
                 'movies_read_item',
@@ -75,23 +70,11 @@ class MovieController extends AbstractController
      */
     public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
-        // Exemple de JSON d'entrée
-        // {
-        //     "title": "New movie from Insomnia 5",
-        //     "releaseDate": "2042-02-15T15:31:08+01:00",
-        //     "genres": [
-        //         1697,
-        //         1698,
-        //         /!\ nouveau genre pas forcément prio sur un MVP
-        //         {
-        //             "name": "" <= si nouveau genre à créer à la volée
-        //         }
-        //     ]
-        // }
+        
 
         // Récupérer le contenu de la requête, càd le JSON
         $jsonContent = $request->getContent();
-        // dd($jsonContent);
+
 
         // On désérialise ce JSON en entité Movie, grâce au Serializer
         // On transforme le JSON en objet de type App\Entity\Movie
@@ -104,9 +87,7 @@ class MovieController extends AbstractController
 
         if (count($errors) > 0) {
 
-            // On dump $errors pour comprendre ce que ça contient
-            // dd($errors);
-
+        
             // Le tableau des erreurs est retourné sous forme de JSON
             // avec un status 422
             // @see https://fr.wikipedia.org/wiki/Liste_des_codes_HTTP
@@ -121,8 +102,7 @@ class MovieController extends AbstractController
         return $this->redirectToRoute(
             'api_movies_read_item',
             ['id' => $movie->getId()],
-            // C'est cool d'utiliser les constantes de classe !
-            // => ça aide à la lecture du code et au fait de penser objet
+          
             Response::HTTP_CREATED
         );
     }
@@ -135,9 +115,8 @@ class MovieController extends AbstractController
      */
     public function putAndPatch(Movie $movie = null, EntityManagerInterface $em, SerializerInterface $serializer, Request $request, ValidatorInterface $validator)
     {
-        // 1. On souhaite modifier le film dont l'id est transmis via l'URL
+       
 
-        // 404 ?
         if ($movie === null) {
             // On retourne un message JSON + un statut 404
             return $this->json(['error' => 'Film non trouvé.'], Response::HTTP_NOT_FOUND);
@@ -146,13 +125,7 @@ class MovieController extends AbstractController
         // Notre JSON qui se trouve dans le body
         $jsonContent = $request->getContent();
 
-        // @todo Pour PUT, s'assurer qu'on ait un certain nombre de champs
-        // @todo Pour PATCH, s'assurer qu'on au moins un champ
-        // sinon => 422 HTTP_UNPROCESSABLE_ENTITY
-
-        // 2. On va devoir associer les données JSON reçues sur l'entité existante
-        // On désérialise les données reçues depuis le front ($request->getContent())... 
-        // ... dans l'objet Movie à modifier
+       
         // @see https://symfony.com/doc/current/components/serializer.html#deserializing-in-an-existing-object
         $serializer->deserialize(
             $jsonContent,
@@ -173,8 +146,7 @@ class MovieController extends AbstractController
         // On flush $movie qui a été modifiée par le Serializer
         $em->flush();
 
-        // @todo Conditionner le message de retour au cas où
-        // l'entité ne serait pas modifiée
+     
         return $this->json(['message' => 'Film modifié.'], Response::HTTP_OK);
     }
 
